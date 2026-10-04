@@ -345,26 +345,24 @@ footer a:hover { opacity: .75; }
   // ---- wallpaper slideshow ----
   // Mirrors the original homepage: five Bing pictures cross-fading on a 30s
   // cycle, 6s apart. Any failure leaves the CSS gradient in place.
-  // ====================  pianone personal change: remove fetch bing wallpaper ops, only using api/config or default css static wallpaper, so comment below ====================  
-  // (function loadWallpapers() {
-  //   fetch('/api/bing/wallpaper').then(function (res) {
-  //     if (!res.ok) throw new Error('wallpaper unavailable');
-  //     return res.json();
-  //   }).then(function (payload) {
-  //     var images = (payload && payload.data) || [];
-  //     if (!images.length) return;
-  //     var backdrop = document.getElementById('backdrop');
-  //     images.slice(0, 5).forEach(function (image, index) {
-  //       if (!image || !image.url) return;
-  //       var figure = document.createElement('figure');
-  //       var url = /^https?:/.test(image.url) ? image.url : 'https://cn.bing.com' + image.url;
-  //       figure.style.backgroundImage = 'url("' + url.replace(/"/g, '%22') + '")';
-  //       figure.style.animationDelay = (index * 6) + 's';
-  //       backdrop.appendChild(figure);
-  //     });
-  //   }).catch(function () { /* gradient fallback already painted */ });
-  // })();
-  // =============================================================================================================================================================================
+  (function loadWallpapers() {
+    fetch('/api/bing/wallpaper').then(function (res) {
+      if (!res.ok) throw new Error('wallpaper unavailable');
+      return res.json();
+    }).then(function (payload) {
+      var images = (payload && payload.data) || [];
+      if (!images.length) return;
+      var backdrop = document.getElementById('backdrop');
+      images.slice(0, 5).forEach(function (image, index) {
+        if (!image || !image.url) return;
+        var figure = document.createElement('figure');
+        var url = /^https?:/.test(image.url) ? image.url : 'https://cn.bing.com' + image.url;
+        figure.style.backgroundImage = 'url("' + url.replace(/"/g, '%22') + '")';
+        figure.style.animationDelay = (index * 6) + 's';
+        backdrop.appendChild(figure);
+      });
+    }).catch(function () { /* gradient fallback already painted */ });
+  })();
 
   // ---- site config (/api/config) ----
   fetch('/api/config').then(function (res) {
